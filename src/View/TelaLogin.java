@@ -12,23 +12,18 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import Controller.Controller;
 import Usuarios.Pessoa;
-
 
 public class TelaLogin extends JFrame {
 
     private JTextField usuarioField;
     private JPasswordField senhaField;
     private JButton loginButton;
-    private Pessoa usuarioLogado;
+    private Controller control; // Usar GeneralController
 
-    public Pessoa mostrar() {
-        this.setVisible(true);
-        return usuarioLogado;
-    }
-    
-
-    public TelaLogin() {
+    public TelaLogin(Controller control) {
+        this.control = control; // Inicialize o controlador
         setTitle("Login");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,48 +38,40 @@ public class TelaLogin extends JFrame {
                 String usuario = usuarioField.getText();
                 String senha = new String(senhaField.getPassword());
 
-                String tipoUsuario = autenticar(usuario, senha);
+                Pessoa pessoa = control.getPessoaByUsernameAndPassword(usuario, senha);
 
-                if (usuario.equals("adm") && senha.equals("1234")) {
-                    JOptionPane.showMessageDialog(null, "Login bem-sucedido!");
-                    dispose();
+                if (pessoa != null) {
+                    String tipo = pessoa.getTipo();
+
+                    switch (tipo) {
+                        case "Funcionario":
+                            JOptionPane.showMessageDialog(null, "Login bem-sucedido como Funcionário!");
+                            dispose();
+                            TelaFuncionario telaFuncionario = new TelaFuncionario(control);
+                            telaFuncionario.setVisible(true);
+                            break;
+                        case "Aluno":
+                            JOptionPane.showMessageDialog(null, "Login bem-sucedido como Aluno!");
+                            dispose();
+                            TelaUsuario telaAluno = new TelaUsuario(control);
+                            telaAluno.setVisible(true);
+                            break;
+                        case "Orientador":
+                            JOptionPane.showMessageDialog(null, "Login bem-sucedido como Orientador!");
+                            dispose();
+                            TelaUsuario telaOrientador = new TelaUsuario(control);
+                            telaOrientador.setVisible(true);
+                            break;
+                        default:
+                            JOptionPane.showMessageDialog(null, "Tipo de usuário desconhecido.");
+                            break;
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
-                }
-        
-                switch (tipoUsuario) {
-                    case "funcionario":
-                        JOptionPane.showMessageDialog(null, "Login bem-sucedido como Funcionário!");
-                        dispose();
-                        TelaFuncionario telaFuncionario = new TelaFuncionario();
-                        telaFuncionario.setVisible(true);
-                        break;
-                    case "comum":
-                        JOptionPane.showMessageDialog(null, "Login bem-sucedido como Usuário Comum!");
-                        dispose();
-                        TelaUsuario telaUsuario = new TelaUsuario();
-                        telaUsuario.setVisible(true);
-                        break;
-                    case "invalido":
-                        JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos.");
-                        break;
                 }
             }
         });
     }
-
-    private String autenticar(String usuario, String senha) {
-        // Simulação de autenticação
-        // Aqui você deve verificar o usuário e senha com base nos dados reais
-        if (usuario.equals("adm") && senha.equals("1234")) {
-            return "funcionario";
-        } else if (usuario.equals("usuario") && senha.equals("senha")) {
-            return "comum";
-        } else {
-            return "invalido";
-        }
-    }
-    
 
     private void placeComponents(JPanel panel) {
         panel.setLayout(null);
@@ -112,7 +99,9 @@ public class TelaLogin extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            TelaLogin telaLogin = new TelaLogin();
+            // Substitua o controlador fictício pelo controlador real
+            Controller controller = null; // Inicialize com a conexão real
+            TelaLogin telaLogin = new TelaLogin(controller);
             telaLogin.setVisible(true);
         });
     }

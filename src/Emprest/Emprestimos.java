@@ -14,7 +14,21 @@ public class Emprestimos {
     private LocalDate dataDevolucao;
     private boolean devolvido;
     
-    
+
+
+ public Emprestimos(int id, Pessoa usuarios, Livro livro, LocalDate dataEmprestimo, String horaDoEmprestimo, LocalDate dataDevolucao) {
+         if (!livros.isDisponivel()) {
+            throw new IllegalArgumentException("Livro não está disponível para empréstimo.");
+        }
+        this.id = id;
+        this.usuarios = usuarios;
+        this.livros = livro;
+        this.dataEmprestimo = dataEmprestimo;
+        this.horaDoEmprestimo = horaDoEmprestimo;
+        this.dataDevolucao = dataDevolucao;
+        this.devolvido = false; // ou como você preferir inicializar
+    }
+
     public Emprestimos(int id, String dataDoEmprestimo, String horaDoEmprestimo, Livro livros, Pessoa usuarios) {
         if (!livros.isDisponivel()) {
             throw new IllegalArgumentException("Livro não está disponível para empréstimo.");
@@ -26,6 +40,8 @@ public class Emprestimos {
         this.usuarios = usuarios;
         this.livros.setDisponivel(false);
     }
+    
+    
     public Emprestimos(String dataDoEmprestimo, String horaDoEmprestimo, Livro livros, Pessoa usuarios) {
         if (!livros.isDisponivel()) {
             throw new IllegalArgumentException("Livro não está disponível para empréstimo.");
@@ -36,7 +52,6 @@ public class Emprestimos {
         this.usuarios = usuarios;
         this.livros.setDisponivel(false);
     }
-
 
     public Emprestimos(Pessoa usuario, Livro livro, LocalDate dataEmprestimo ) {
         this.usuarios = usuario;
@@ -81,10 +96,6 @@ public class Emprestimos {
         return dataEmprestimo;
     }
 
-    public LocalDate getDataDevolucao() {
-        return dataDevolucao;
-    }
-
     public boolean isDevolvido() {
         return devolvido;
     }
@@ -92,8 +103,17 @@ public class Emprestimos {
     public void setDevolvido(boolean devolvido) {
         this.devolvido = devolvido;
     }
-    public void devolverLivro(Livro livro){
+
+    public void devolverLivro() {
         this.livros.setDisponivel(true);
+        this.devolvido = true;
     }
 
+    public LocalDate getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(LocalDate dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
+    }
 }

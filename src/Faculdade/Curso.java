@@ -3,7 +3,7 @@ package Faculdade;
 public class Curso {
     private AreaConhecimento areaConhecimento;
     private String tituloCurso;
-    private long codCurso;
+    private int id;
 
 
     public Curso(String tituloCurso) {
@@ -22,12 +22,13 @@ public class Curso {
     public void setTituloCurso(String tituloCurso) {
         this.tituloCurso = tituloCurso;
     }
-    public long getCodCurso() {
-        return codCurso;
-    }
-    public void setCodCurso(long codCurso) {
-        this.codCurso = codCurso;
+
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
     
 }

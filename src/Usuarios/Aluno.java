@@ -1,38 +1,41 @@
 package Usuarios;
 
-import java.io.Serializable;
 
-public class Aluno extends Pessoa implements Serializable{
+public class Aluno extends Pessoa {
     private static final long serialVersionUID = 1L;
 
     private String instituicaoEducacional;
     private String matricula;
 
-    
-
     public Aluno(String nome, int idade, String sexo, String telefone, String senha) {
         super(nome, idade, sexo, telefone, senha);
+        setTipo("Aluno");
     }
 
-   
+    
+    public Aluno(String nome, int idade, String sexo, String cpf, String telefone, String senha) {
+        super(nome, idade, sexo, cpf, telefone, senha);
+        setTipo("Aluno");
+    }
+
 
     public Aluno(String nome, String senha) {
         super(nome, senha);
+        setTipo("Aluno");
     }
-
-
 
     public Aluno(String nome) {
         super(nome);
+        setTipo("Aluno");
     }
-
-
+    
 
     public Aluno(String nome, int idade, String sexo, String telefone, String instituicaoEducacional,
                      String matricula, String senha) {
         super(nome, idade, sexo, telefone, senha);
         this.instituicaoEducacional = instituicaoEducacional;
         this.matricula = matricula;
+        setTipo("Aluno");
     }
     
     public String getInstituicaoEducacional() {
@@ -62,6 +65,4 @@ public class Aluno extends Pessoa implements Serializable{
                 + ", toString()=" + super.toString() + "]";
     }
 
-    
-    
 }

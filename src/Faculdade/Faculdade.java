@@ -1,7 +1,7 @@
 package Faculdade;
 
 public class Faculdade {
-private long cod;
+private int id;
 private String nome;
 private String estado;
 private String cidade;
@@ -11,12 +11,7 @@ public Faculdade(String nome) {
     this.nome = nome;
 }
 
-public long getCod() {
-    return cod;
-}
-public void setCod(long cod) {
-    this.cod = cod;
-}
+
 public String getNome() {
     return nome;
 }
@@ -34,6 +29,18 @@ public String getCidade() {
 }
 public void setCidade(String cidade) {
     this.cidade = cidade;
+}
+public int getId() {
+    return id;
+}
+public void setId(int id) {
+    this.id = id;
+}
+
+
+public Faculdade findById(long id2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'findById'");
 }
 
 

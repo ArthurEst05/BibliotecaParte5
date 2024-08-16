@@ -14,13 +14,13 @@ import Usuarios.Pessoa;
 
 public class GerenciadorUsuario extends JFrame {
     Controller control;
-    public static final String USUARIOS_FILE = "C:\\temp\\usuarios.txt";
     public static ArrayList<Pessoa> usuarios;
     private JTextField nomeField, idadeField, sexoField, telefoneField, senhaField;
     private JTextField cargoField, salarioField, enderecoField, instituicaoField, matriculaField;
     private JTextField disciplinaField, grauAcademicoField, emailField;
 
-    public GerenciadorUsuario() {
+    public GerenciadorUsuario(Controller control) {
+        this.control = control;
         setTitle("Gerenciar Usuários");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -131,8 +131,7 @@ public class GerenciadorUsuario extends JFrame {
                     usuario = new Aluno(nome, idade, sexo, telefone, senha);
                 }
 
-                usuarios.add(usuario);
-                control.saveUsuariosToFile(USUARIOS_FILE, usuarios);
+                control.addPessoa(usuario);
                 clearFields();
             }
         });
@@ -143,8 +142,10 @@ public class GerenciadorUsuario extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome = nomeField.getText();
-                usuarios.removeIf(u -> u.getNome().equals(nome));
-                control.saveUsuariosToFile(USUARIOS_FILE, usuarios);
+                Pessoa usuario = control.getPessoaById(Integer.parseInt(nome)); // Assumindo que nome é ID aqui
+                if (usuario != null) {
+                    control.deletePessoa(usuario.getId());
+                }
                 clearFields();
             }
         });
@@ -155,15 +156,13 @@ public class GerenciadorUsuario extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nome = nomeField.getText();
-                for (Pessoa u : usuarios) {
-                    if (u.getNome().equals(nome)) {
-                        u.setIdade(Integer.parseInt(idadeField.getText()));
-                        u.setSexo(sexoField.getText());
-                        u.setTelefone(telefoneField.getText());
-                        u.setSenha(senhaField.getText());
-                        control.saveUsuariosToFile(USUARIOS_FILE, usuarios);
-                        break;
-                    }
+                Pessoa usuario = control.getPessoaById(Integer.parseInt(nome)); // Assumindo que nome é ID aqui
+                if (usuario != null) {
+                    usuario.setIdade(Integer.parseInt(idadeField.getText()));
+                    usuario.setSexo(sexoField.getText());
+                    usuario.setTelefone(telefoneField.getText());
+                    usuario.setSenha(senhaField.getText());
+                    control.updatePessoa(usuario);
                 }
                 clearFields();
             }
@@ -189,7 +188,8 @@ public class GerenciadorUsuario extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new GerenciadorUsuario().setVisible(true);
+            Controller controller = new Controller(null); // Substitua por uma conexão real
+            new GerenciadorUsuario(controller).setVisible(true);
         });
     }
 }

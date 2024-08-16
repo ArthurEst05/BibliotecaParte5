@@ -1,18 +1,15 @@
 package Usuarios;
 
-import java.io.Serializable;
 
-public class Funcionario extends Pessoa implements Serializable{
+public class Funcionario extends Pessoa{
     private static final long serialVersionUID = 1L;
-
-
     private String cargo;
     private double salario;
     private String endereço;
 
-    
     public Funcionario(String nome, String senha) {
         super(nome, senha);
+        setTipo("Funcionario");
     }
 
     public Funcionario(String nome, int idade, String sexo, String telefone, String cargo, double salario, String endereço, String senha) {
@@ -20,6 +17,7 @@ public class Funcionario extends Pessoa implements Serializable{
         this.cargo = cargo;
         this.salario = salario;
         this.endereço = endereço;
+        setTipo("Funcionario");
     }
 
     public String getCargo() {
@@ -48,5 +46,4 @@ public class Funcionario extends Pessoa implements Serializable{
                 + ", getTelefone()=" + getTelefone() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
                 + ", toString()=" + super.toString() + "]";
     }
-
 }

@@ -12,11 +12,26 @@ public abstract class Pessoa implements Serializable{
     private String cpf;
     private String telefone;
     private String senha;
+    private String tipo;
 
+
+    public Pessoa(){
+    }
     public Pessoa(String nome, String senha) {
         this.nome = nome;
         this.senha = senha;
     }
+
+    
+    public Pessoa(String nome, int idade, String sexo, String cpf, String telefone, String senha) {
+        this.nome = nome;
+        this.idade = idade;
+        this.sexo = sexo;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.senha = senha;
+    }
+
 
     public Pessoa(String nome, int idade, String sexo, String telefone,String senha) {
         this.nome = nome;
@@ -26,8 +41,6 @@ public abstract class Pessoa implements Serializable{
         this.senha = senha;
     }
 
-    
-    
     public void setSenha(String senha) {
         this.senha = senha;
     }
@@ -87,8 +100,17 @@ public abstract class Pessoa implements Serializable{
     public String getSenha() {
         return senha;
     }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
 
-    public abstract String getTipo();
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
 
     public static String getTipoUsuario(Pessoa usuario) {
     if (usuario != null) {
@@ -97,6 +119,4 @@ public abstract class Pessoa implements Serializable{
         return "Usuário desconhecido";
     }
 }
-
-
 }

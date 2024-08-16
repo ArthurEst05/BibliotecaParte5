@@ -1,22 +1,20 @@
 package Usuarios;
 
-import java.io.Serializable;
 
-public class Orientador extends Pessoa implements Serializable{
+public class Orientador extends Pessoa{
     private static final long serialVersionUID = 1L;
-
     private String disciplina;
     private String grauAcademico;
     private String email;
 
-    
     public Orientador(String nome, String senha) {
         super(nome, senha);
+        setTipo("Orientador");
     }
-
 
     public Orientador(String nome, int idade, String sexo, String telefone, String senha) {
         super(nome, idade, sexo, telefone, senha);
+        setTipo("Orientador");
     }
 
     public Orientador(String nome, int idade, String sexo, String telefone, String disciplina, String grauAcademico, String senha, String email) {
@@ -24,6 +22,7 @@ public class Orientador extends Pessoa implements Serializable{
         this.disciplina = disciplina;
         this.grauAcademico = grauAcademico;
         this.email = email;
+        setTipo("Orientador");
     }
     
     public Orientador(String nome){
@@ -43,8 +42,7 @@ public class Orientador extends Pessoa implements Serializable{
         this.grauAcademico = grauAcademico;
     }
 
-
- public String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -67,7 +65,4 @@ public class Orientador extends Pessoa implements Serializable{
                 + getTelefone() + ", email = " + getEmail() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
                 + super.toString() + "]";
     }
-
-    
-
 }
