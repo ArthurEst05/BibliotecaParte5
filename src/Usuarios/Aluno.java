@@ -7,6 +7,7 @@ public class Aluno extends Pessoa {
     private String instituicaoEducacional;
     private String matricula;
 
+    public Aluno(){}
     public Aluno(String nome, int idade, String sexo, String telefone, String senha) {
         super(nome, idade, sexo, telefone, senha);
         setTipo("Aluno");

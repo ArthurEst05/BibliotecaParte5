@@ -2,6 +2,7 @@ package View;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import Controller.Controller;
+import DB.DB;
 import Usuarios.Pessoa;
 
 public class TelaLogin extends JFrame {
@@ -98,11 +100,16 @@ public class TelaLogin extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Substitua o controlador fictício pelo controlador real
-            Controller controller = null; // Inicialize com a conexão real
+    SwingUtilities.invokeLater(() -> {
+        Connection conn = DB.getConnection();
+        
+        if (conn != null) {
+            Controller controller = new Controller(conn);
             TelaLogin telaLogin = new TelaLogin(controller);
             telaLogin.setVisible(true);
-        });
-    }
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    });
+}
 }

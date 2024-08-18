@@ -163,11 +163,11 @@ public class TelaUsuario extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JTextField tituloField = new JTextField(20);
-        JTextField faculdadeIdField = new JTextField(20);  // Espera o ID da faculdade
+        JTextField faculdadeIdField = new JTextField(20); 
         JTextField dataConclusaoField = new JTextField(20);
-        JTextField alunoIdField = new JTextField(20);  // Espera o ID do aluno
-        JTextField orientadorIdField = new JTextField(20);  // Espera o ID do orientador
-        JTextField cursoIdField = new JTextField(20);  // Espera o ID do curso
+        JTextField alunoIdField = new JTextField(20);  
+        JTextField orientadorIdField = new JTextField(20);  
+        JTextField cursoIdField = new JTextField(20);  
 
         panel.add(new JLabel("Título do Trabalho:"));
         panel.add(tituloField);

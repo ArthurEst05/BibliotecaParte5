@@ -7,6 +7,8 @@ public class Orientador extends Pessoa{
     private String grauAcademico;
     private String email;
 
+    public Orientador(){}
+
     public Orientador(String nome, String senha) {
         super(nome, senha);
         setTipo("Orientador");

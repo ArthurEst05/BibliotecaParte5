@@ -132,47 +132,46 @@ public class PessoaDaoJDBC implements PessoaDao {
     }
 
     @Override
-public List<Pessoa> findAll() {
-    String sql = "SELECT * FROM Pessoa";
-    List<Pessoa> pessoas = new ArrayList<>();
-
-    try (PreparedStatement stmt = conn.prepareStatement(sql);
-         ResultSet rs = stmt.executeQuery()) {
-
-        while (rs.next()) {
-            String nome = rs.getString("nome");
-            int idade = rs.getInt("idade");
-            String sexo = rs.getString("sexo");
-            String cpf = rs.getString("cpf");
-            String telefone = rs.getString("telefone");
-            String senha = rs.getString("senha");
-            String tipo = rs.getString("tipo");
-
-            Pessoa pessoa = null;
-            switch (tipo) {
-                case "Aluno":
-                    pessoa = new Aluno(nome, idade, sexo, telefone, cpf, senha);
-                    break;
-                case "Funcionario":
-                    pessoa = new Funcionario(nome, idade, sexo, telefone, senha, 0.0, "", cpf);
-                    break;
-                case "Orientador":
-                    pessoa = new Orientador(nome, idade, sexo, telefone, senha);
-                    break;
-                default:
-                    throw new SQLException("Tipo de pessoa desconhecido: " + tipo);
+    public List<Pessoa> findAll() {
+        String sql = "SELECT * FROM Pessoa";
+        List<Pessoa> pessoas = new ArrayList<>();
+    
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                int idade = rs.getInt("idade");
+                String sexo = rs.getString("sexo");
+                String cpf = rs.getString("cpf");
+                String telefone = rs.getString("telefone");
+                String senha = rs.getString("senha");
+                String tipo = rs.getString("tipo");
+    
+                Pessoa pessoa = null;
+                switch (tipo) {
+                    case "Aluno":
+                        pessoa = new Aluno(nome, idade, sexo, telefone, cpf, senha);
+                        break;
+                    case "Funcionario":
+                        pessoa = new Funcionario(nome, idade, sexo, telefone, senha, 0.0, "", cpf);
+                        break;
+                    case "Orientador":
+                        pessoa = new Orientador(nome, idade, sexo, telefone, senha);
+                        break;
+                    default:
+                        throw new SQLException("Tipo de pessoa desconhecido: " + tipo);
+                }
+                pessoa.setId(rs.getInt("id"));
+                pessoa.setCpf(cpf);
+                pessoas.add(pessoa);
             }
-            pessoa.setId(rs.getInt("id"));
-            pessoa.setCpf(cpf);
-            pessoas.add(pessoa);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+    
+        return pessoas;
     }
-
-    return pessoas;
-}
-
 public Pessoa getPessoaByUsernameAndPassword(String username, String password) throws SQLException {
     String sql = "SELECT * FROM Pessoa WHERE cpf = ? AND senha = ?";
     Pessoa pessoa = null;
@@ -227,29 +226,30 @@ public Pessoa findByUsernameAndPassword(String username, String password) throws
     return null;
 }
 
-private Pessoa mapResultSetToPessoa(ResultSet resultSet) throws SQLException {
-    // Mapeamento do ResultSet para o objeto Pessoa
-    // Isso deve ser ajustado conforme o tipo de Pessoa e seus campos
-    // Aqui está um exemplo básico
-    int id = resultSet.getInt("id");
-    String nome = resultSet.getString("nome");
-    int idade = resultSet.getInt("idade");
-    String sexo = resultSet.getString("sexo");
-    String cpf = resultSet.getString("cpf");
-    String telefone = resultSet.getString("telefone");
-    String senha = resultSet.getString("senha");
-    String tipo = resultSet.getString("tipo");
+public Pessoa mapResultSetToPessoa(ResultSet rs) throws SQLException {
+    String tipo = rs.getString("tipo");
+
+    Pessoa pessoa = null;
 
     switch (tipo) {
-        case "Aluno":
-            return new Aluno(nome, idade, sexo, cpf, telefone, senha);
         case "Funcionario":
-            return new Funcionario(nome, idade, sexo, telefone, senha, 0.0, "", cpf);
+            pessoa = new Funcionario();
+            break;
+        case "Aluno":
+            pessoa = new Aluno();
+            break;
         case "Orientador":
-            return new Orientador(nome, idade, sexo, telefone, senha);
+            pessoa = new Orientador();
+            break;
         default:
             throw new IllegalArgumentException("Tipo de pessoa desconhecido: " + tipo);
     }
+
+    pessoa.setId(rs.getInt("id"));
+    pessoa.setNome(rs.getString("nome"));
+    pessoa.setSenha(rs.getString("senha"));
+
+    return pessoa;
 }
 
 

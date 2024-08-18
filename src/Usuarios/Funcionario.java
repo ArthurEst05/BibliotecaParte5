@@ -7,6 +7,8 @@ public class Funcionario extends Pessoa{
     private double salario;
     private String endereço;
 
+    public Funcionario(){}
+
     public Funcionario(String nome, String senha) {
         super(nome, senha);
         setTipo("Funcionario");
@@ -35,7 +37,7 @@ public class Funcionario extends Pessoa{
 
     @Override
      public String getTipo() {
-        return "Funcionário";
+        return "Funcionario";
     }
 
     @Override
