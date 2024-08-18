@@ -1,34 +1,25 @@
 package Emprest;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import Obras.Livro;
 import Usuarios.Pessoa;
 
 public class Reserva {
     private int id;
-    private Emprestimos Emprestimo;
-    private Livro livros;
-    private Pessoa usuarios;
+    private Emprestimos emprestimoFuturo; // Relacionamento com o futuro empréstimo
+    private Livro livro;
+    private Pessoa usuario;
     private LocalDate dataReserva;
-    private LocalTime horaReserva;
     private String status;
 
-
-    public Reserva(Pessoa usuario, Livro livro, LocalDate dataReserva, LocalTime horaReserva) {
-        this.usuarios = usuario;
-        this.livros = livro;
-        this.dataReserva = dataReserva;
-        this.horaReserva = horaReserva;
-    }
-
-    public Reserva(Livro livros, Pessoa usuarios) {
-        if (livros.isDisponivel()) {
+    public Reserva(Pessoa usuario, Livro livro, LocalDate dataReserva) {
+        if (livro.isDisponivel()) {
             throw new IllegalArgumentException("Livro está disponível, faça um empréstimo em vez de uma reserva.");
         }
-        this.livros = livros;
-        this.usuarios = usuarios;
+        this.usuario = usuario;
+        this.livro = livro;
+        this.dataReserva = dataReserva;
         this.status = "Ativa";
     }
 
@@ -40,29 +31,38 @@ public class Reserva {
         this.id = id;
     }
 
-    public Emprestimos getEmprestimo() {
-        return Emprestimo;
+    public Emprestimos getEmprestimoFuturo() {
+        return emprestimoFuturo;
     }
 
-    public void setEmprestimo(Emprestimos emprestimo) {
-        Emprestimo = emprestimo;
+    public void setEmprestimoFuturo(Emprestimos emprestimoFuturo) {
+        this.emprestimoFuturo = emprestimoFuturo;
     }
 
-    public Livro getLivros() {
-        return livros;
+    public Livro getLivro() {
+        return livro;
     }
 
-    public void setLivros(Livro livros) {
-        this.livros = livros;
+    public void setLivro(Livro livro) {
+        this.livro = livro;
     }
 
-    public Pessoa getPessoa() {
-        return usuarios;
+    public Pessoa getUsuario() {
+        return usuario;
     }
 
-    public void setPessoa(Pessoa usuarios) {
-        this.usuarios = usuarios;
+    public void setUsuario(Pessoa usuario) {
+        this.usuario = usuario;
     }
+
+    public LocalDate getDataReserva() {
+        return dataReserva;
+    }
+
+    public void setDataReserva(LocalDate dataReserva) {
+        this.dataReserva = dataReserva;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -70,18 +70,12 @@ public class Reserva {
     public void setStatus(String status) {
         this.status = status;
     }
+
     public void cancelar() {
         this.status = "Cancelada";
     }
-    public LocalDate getDataReserva() {
-        return dataReserva;
-    }
 
-    public LocalTime getHoraReserva() {
-        return horaReserva;
-    }
-    // Método para verificar se a reserva está ativa
     public boolean isAtiva() {
-        return this.status.equals("Ativa");
+        return "Ativa".equals(this.status);
     }
 }

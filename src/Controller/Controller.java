@@ -71,6 +71,14 @@ public class Controller {
     public void deleteLivro(int id) { livroDao.deleteById(id); }
     public Livro getLivroById(int id) { return livroDao.findById(id); }
     public List<Livro> getAllLivros() { return livroDao.findAll(); }
+    public Livro getLivroByTitulo(String titulo) {
+        try {
+            return livroDao.findByTitulo(titulo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // Funcionários
     public void addFuncionario(Funcionario funcionario) { funcionarioDao.insert(funcionario); }

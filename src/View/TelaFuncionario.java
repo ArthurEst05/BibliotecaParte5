@@ -3,6 +3,8 @@ package View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,20 +29,48 @@ public class TelaFuncionario extends JFrame {
 
     public TelaFuncionario(Controller control) {
         this.control = control;
+        inicializarDados();  // Chame o método de inicialização aqui
         setTitle("Tela Funcionário");
-        setSize(600, 400);
+        setSize(800, 600); // Ajuste no tamanho para acomodar as abas
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel();
-        add(panel);
-        placeComponents(panel);
+        // Abas para diferentes funcionalidades
+        JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Inicializa os dados
+        // Aba de Gerenciamento de Usuários e Livros
+        JPanel mainPanel = new JPanel();
+        placeComponents(mainPanel);
+        tabbedPane.addTab("Gerenciar", mainPanel);
+
+        // Aba de Empréstimos
+        JPanel emprestimoPanel = createEmprestimoPanel();
+        tabbedPane.addTab("Realizar Empréstimo", emprestimoPanel);
+
+        add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    private void inicializarDados() {
+        // Inicialize as listas com os dados do controlador ou como listas vazias
         livros = control.getAllLivros();
+        if (livros == null) {
+            livros = new ArrayList<>();
+        }
+
         usuarios = control.getAllPessoas();
+        if (usuarios == null) {
+            usuarios = new ArrayList<>();
+        }
+
         emprestimos = control.getAllEmprestimos();
+        if (emprestimos == null) {
+            emprestimos = new ArrayList<>();
+        }
+
         reservas = control.getAllReservas();
+        if (reservas == null) {
+            reservas = new ArrayList<>();
+        }
     }
 
     private void placeComponents(JPanel panel) {
@@ -52,19 +82,11 @@ public class TelaFuncionario extends JFrame {
         JButton listarLivrosButton = new JButton("Listar Livros");
         JButton gerenciarLivrosButton = new JButton("Gerenciar Livros");
         JButton gerenciarUsuariosButton = new JButton("Gerenciar Usuários");
-        JButton emprestimoButton = new JButton("Empréstimo");
-        JButton reservarButton = new JButton("Reservar");
-        JButton devoluçãoButton = new JButton("Devolução/Renovação");
-        JButton obraDigitalButton = new JButton("Acessar obra digital");
 
         buttonPanel.add(listarUsuariosButton);
         buttonPanel.add(listarLivrosButton);
         buttonPanel.add(gerenciarLivrosButton);
         buttonPanel.add(gerenciarUsuariosButton);
-        buttonPanel.add(emprestimoButton);
-        buttonPanel.add(reservarButton);
-        buttonPanel.add(devoluçãoButton);
-        buttonPanel.add(obraDigitalButton);
 
         panel.add(buttonPanel);
 
@@ -110,141 +132,71 @@ public class TelaFuncionario extends JFrame {
                 gerenciadorUsuario.setVisible(true);
             }
         });
+    }
 
-        emprestimoButton.addActionListener(new ActionListener() {
+    private JPanel createEmprestimoPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Campos para seleção do Livro e Usuário
+        JTextField livroTituloField = new JTextField(20);
+        JTextField usuarioNomeField = new JTextField(20);
+
+        panel.add(new JLabel("Digite o título do livro:"));
+        panel.add(livroTituloField);
+        panel.add(new JLabel("Digite o nome do usuário:"));
+        panel.add(usuarioNomeField);
+
+        JButton realizarEmprestimoButton = new JButton("Realizar Empréstimo");
+        realizarEmprestimoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DialogEmprestimo dialog = new DialogEmprestimo(
-                    TelaFuncionario.this,
-                    livros,
-                    usuarios,
-                    emprestimos,
-                    control
-                );
-                dialog.setVisible(true);
-            }
-        });
+                String livroTitulo = livroTituloField.getText().trim();
+                String usuarioNome = usuarioNomeField.getText().trim();
 
-        reservarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JPanel panel = new JPanel();
-                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+                Livro livroSelecionado = livros.stream()
+                    .filter(livro -> livro.getTitulo().equalsIgnoreCase(livroTitulo))
+                    .findFirst().orElse(null);
 
-                JTextField livroTituloField = new JTextField(20);
-                JTextField usuarioNomeField = new JTextField(20);
+                Pessoa usuarioSelecionado = usuarios.stream()
+                    .filter(usuario -> usuario.getNome().equalsIgnoreCase(usuarioNome))
+                    .findFirst().orElse(null);
 
-                panel.add(new JLabel("Digite o título do livro:"));
-                panel.add(livroTituloField);
-                panel.add(new JLabel("Digite o nome do usuário:"));
-                panel.add(usuarioNomeField);
-
-                int result = JOptionPane.showConfirmDialog(null, panel, "Reservar Livro", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                if (result == JOptionPane.OK_OPTION) {
-                    String livroTitulo = livroTituloField.getText();
-                    String usuarioNome = usuarioNomeField.getText();
-
-                    Livro livroReserva = livros.stream()
-                        .filter(livro -> livro.getTitulo().equalsIgnoreCase(livroTitulo))
-                        .findFirst().orElse(null);
-
-                    Pessoa usuarioReserva = usuarios.stream()
-                        .filter(usuario -> usuario.getNome().equalsIgnoreCase(usuarioNome))
-                        .findFirst().orElse(null);
-
-                    if (livroReserva == null) {
-                        JOptionPane.showMessageDialog(null, "Livro não encontrado.");
-                        return;
-                    }
-
-                    if (usuarioReserva == null) {
-                        JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-                        return;
-                    }
-
-                    if (livroReserva.isDisponivel()) {
-                        JOptionPane.showMessageDialog(null, "O livro está disponível para empréstimo, não é necessário reservar.");
-                        return;
-                    }
-
-                    Reserva novaReserva = new Reserva(usuarioReserva, livroReserva, null, null);
-                    reservas.add(novaReserva);
-                    control.addReserva(novaReserva);
-
-                    JOptionPane.showMessageDialog(null, "Reserva realizada com sucesso.");
+                if (livroSelecionado == null) {
+                    JOptionPane.showMessageDialog(null, "Livro não encontrado.");
+                    return;
                 }
-            }
-        });
 
-        devoluçãoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JPanel panel = new JPanel();
-                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-                JTextField livroTituloField = new JTextField(20);
-                JTextField usuarioNomeField = new JTextField(20);
-
-                panel.add(new JLabel("Digite o título do livro:"));
-                panel.add(livroTituloField);
-                panel.add(new JLabel("Digite o nome do usuário:"));
-                panel.add(usuarioNomeField);
-
-                int result = JOptionPane.showConfirmDialog(null, panel, "Devolução de Livro", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                if (result == JOptionPane.OK_OPTION) {
-                    String livroTitulo = livroTituloField.getText();
-                    String usuarioNome = usuarioNomeField.getText();
-
-                    Livro livroDevolucao = livros.stream()
-                        .filter(livro -> livro.getTitulo().equalsIgnoreCase(livroTitulo))
-                        .findFirst().orElse(null);
-
-                    Pessoa usuarioDevolucao = usuarios.stream()
-                        .filter(usuario -> usuario.getNome().equalsIgnoreCase(usuarioNome))
-                        .findFirst().orElse(null);
-
-                    if (livroDevolucao == null) {
-                        JOptionPane.showMessageDialog(null, "Livro não encontrado.");
-                        return;
-                    }
-
-                    if (usuarioDevolucao == null) {
-                        JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-                        return;
-                    }
-
-                    Emprestimos emprestimoDevolucao = emprestimos.stream()
-                        .filter(emprestimo -> emprestimo.getLivros().equals(livroDevolucao) &&
-                                            emprestimo.getPessoa().equals(usuarioDevolucao) &&
-                                            !emprestimo.isDevolvido())
-                        .findFirst().orElse(null);
-
-                    if (emprestimoDevolucao == null) {
-                        JOptionPane.showMessageDialog(null, "Não há empréstimo registrado para este livro e usuário.");
-                        return;
-                    }
-
-                    emprestimoDevolucao.setDevolvido(true);
-                    livroDevolucao.setDisponivel(true);
-
-                    control.updateEmprestimo(emprestimoDevolucao);
-                    control.updateLivro(livroDevolucao);
-
-                    JOptionPane.showMessageDialog(null, "Devolução realizada com sucesso.");
+                if (usuarioSelecionado == null) {
+                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                    return;
                 }
+
+                if (!livroSelecionado.isDisponivel()) {
+                    JOptionPane.showMessageDialog(null, "O livro não está disponível para empréstimo.");
+                    return;
+                }
+
+                // Definir a data do empréstimo e a data de devolução
+                LocalDate dataEmprestimo = LocalDate.now();
+                LocalDate dataDevolucao = dataEmprestimo.plusDays(14); // Exemplo de prazo de 14 dias
+
+                // Realizar o empréstimo
+                Emprestimos novoEmprestimo = new Emprestimos(usuarioSelecionado, livroSelecionado, dataEmprestimo, dataDevolucao);
+                emprestimos.add(novoEmprestimo);
+                control.addEmprestimo(novoEmprestimo);
+
+                // Atualizar a disponibilidade do livro
+                livroSelecionado.setDisponivel(false);
+                control.updateLivro(livroSelecionado);
+
+                JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
             }
         });
 
-        obraDigitalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DialogObrasDigitais dialog = new DialogObrasDigitais(
-                    TelaFuncionario.this,
-                    livros
-                );
-                dialog.setVisible(true);
-            }
-        });
+        panel.add(realizarEmprestimoButton);
+
+        return panel;
     }
 
     private void updateLivrosTable() {
@@ -263,18 +215,18 @@ public class TelaFuncionario extends JFrame {
     private void updateUsuariosTable() {
         // Certifique-se de que a lista de usuários esteja atualizada
         usuarios = control.getAllPessoas();
-    
+
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nome");
         model.addColumn("Tipo");
-    
+
         for (Pessoa usuario : usuarios) {
             String tipo = usuario instanceof Aluno ? "Aluno" : usuario instanceof Funcionario ? "Funcionario" : "Orientador";
             model.addRow(new Object[]{usuario.getNome(), tipo});
         }
-    
+
         usuariosTable.setModel(model);
-    
+
         // Revalide e repinte a tabela
         usuariosTable.revalidate();
         usuariosTable.repaint();

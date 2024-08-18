@@ -9,6 +9,7 @@ public interface LivroDao {
     void update(Livro obj);
     void deleteById(Integer id);
     Livro findById(Integer id);
+    Livro findByTitulo(String titulo);
     List<Livro> findAll();
 
 }

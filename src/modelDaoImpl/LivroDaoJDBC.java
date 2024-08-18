@@ -97,7 +97,7 @@ public class LivroDaoJDBC implements LivroDao {
         String sql = "SELECT * FROM livro";
         List<Livro> livros = new ArrayList<>();
         try (PreparedStatement st = conn.prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) {
+                ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 livros.add(instantiateLivro(rs));
             }
@@ -109,12 +109,11 @@ public class LivroDaoJDBC implements LivroDao {
 
     private Livro instantiateLivro(ResultSet rs) throws SQLException {
         Livro livro = new Livro(
-            rs.getString("titulo"),
-            rs.getString("autores"),
-            rs.getString("area"),
-            rs.getString("ano"),
-            rs.getBoolean("digital")
-        );
+                rs.getString("titulo"),
+                rs.getString("autores"),
+                rs.getString("area"),
+                rs.getString("ano"),
+                rs.getBoolean("digital"));
         livro.setId(rs.getInt("id"));
         livro.setEditora(rs.getString("editora"));
         livro.setEdicao(rs.getString("edicao"));
@@ -122,4 +121,21 @@ public class LivroDaoJDBC implements LivroDao {
         livro.setDisponivel(rs.getBoolean("disponivel"));
         return livro;
     }
+
+    @Override
+    public Livro findByTitulo(String titulo) {
+        String sql = "SELECT * FROM livro WHERE titulo = ?";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setString(1, titulo);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return instantiateLivro(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar o livro pelo título: " + titulo, e);
+        }
+        return null; // Retorna null se o livro não for encontrado
+    }
+
 }
