@@ -46,7 +46,7 @@ public class GerenciadorUsuario extends JFrame {
 
         add(tabbedPane, BorderLayout.CENTER);
 
-        // Botões para Gerenciamento
+        
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3, 10, 10));
 
@@ -60,7 +60,7 @@ public class GerenciadorUsuario extends JFrame {
                     String sexo = "", telefone = "", senha = "";
                     Pessoa usuario = null;
 
-                    // Identifica qual aba está ativa
+                    
                     int selectedTab = tabbedPane.getSelectedIndex();
                     if (selectedTab == 0) { // Aba Aluno
                         nome = nomeFieldAluno.getText().trim();
@@ -108,10 +108,9 @@ public class GerenciadorUsuario extends JFrame {
             }
         });
 
-        // Demais botões seguem aqui...
-
+        
         buttonPanel.add(cadastrarButton);
-        // Adicione os outros botões
+  
 
         add(buttonPanel, BorderLayout.SOUTH);
     }
@@ -241,7 +240,7 @@ public class GerenciadorUsuario extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Controller controller = new Controller(null); // Substitua por uma conexão real
+            Controller controller = new Controller(null); 
             new GerenciadorUsuario(controller).setVisible(true);
         });
     }

@@ -43,7 +43,7 @@ public class AlunoDaoJDBC implements AlunoDao {
                 throw new SQLException("Failed to insert aluno, no rows affected.");
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Tratar exceções de forma apropriada
+            e.printStackTrace(); 
         }
     }
 

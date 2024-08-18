@@ -135,7 +135,7 @@ public class LivroDaoJDBC implements LivroDao {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar o livro pelo título: " + titulo, e);
         }
-        return null; // Retorna null se o livro não for encontrado
+        return null;
     }
 
 }

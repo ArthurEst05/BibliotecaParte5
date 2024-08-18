@@ -22,10 +22,10 @@ public class TelaLogin extends JFrame {
     private JTextField usuarioField;
     private JPasswordField senhaField;
     private JButton loginButton;
-    private Controller control; // Usar GeneralController
+    private Controller control; 
 
     public TelaLogin(Controller control) {
-        this.control = control; // Inicialize o controlador
+        this.control = control; 
         setTitle("Login");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

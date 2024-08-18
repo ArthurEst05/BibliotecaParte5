@@ -56,7 +56,7 @@ public class Orientador extends Pessoa{
 
 @Override
     public String getTipo() {
-        return "Professor";
+        return "Orientador";
     }
     
     @Override

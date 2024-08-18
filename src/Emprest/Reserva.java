@@ -7,7 +7,7 @@ import Usuarios.Pessoa;
 
 public class Reserva {
     private int id;
-    private Emprestimos emprestimoFuturo; // Relacionamento com o futuro empréstimo
+    private Emprestimos emprestimoFuturo;
     private Livro livro;
     private Pessoa usuario;
     private LocalDate dataReserva;

@@ -27,7 +27,7 @@ public class CursoDaoJDBC implements CursoDao {
             if (rowsAffected > 0) {
                 try (ResultSet rs = st.getGeneratedKeys()) {
                     if (rs.next()) {
-                        obj.setId(rs.getInt(1)); // Atualiza o ID gerado para o objeto
+                        obj.setId(rs.getInt(1)); 
                     }
                 }
             }

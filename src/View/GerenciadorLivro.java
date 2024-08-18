@@ -97,7 +97,7 @@ public class GerenciadorLivro extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Controller controller = new Controller(null); // Substitua por uma conexão real
+            Controller controller = new Controller(null); 
             new GerenciadorLivro(controller).setVisible(true);
         });
     }

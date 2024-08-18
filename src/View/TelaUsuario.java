@@ -2,7 +2,6 @@ package View;
 
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -63,47 +62,49 @@ public class TelaUsuario extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JTextField tituloField = new JTextField(20);
-        JTextField faculdadeIdField = new JTextField(20);
+        JTextField faculdadeField = new JTextField(20);
         JTextField dataConclusaoField = new JTextField(20);
-        JTextField alunoIdField = new JTextField(20);
-        JTextField orientadorIdField = new JTextField(20);
-        JTextField cursoIdField = new JTextField(20);
+        JTextField alunoField = new JTextField(20);
+        JTextField orientadorField = new JTextField(20);
+        JTextField cursoField = new JTextField(20);
+        JTextField localArquivoField = new JTextField(20);
 
         panel.add(new JLabel("Título do Trabalho:"));
         panel.add(tituloField);
-        panel.add(new JLabel("ID da Faculdade:"));
-        panel.add(faculdadeIdField);
-        panel.add(new JLabel("Data de Conclusão:"));
+        panel.add(new JLabel("Faculdade:"));
+        panel.add(faculdadeField);
+        panel.add(new JLabel("Data de Conclusão (YYYY-MM-DD):"));
         panel.add(dataConclusaoField);
-        panel.add(new JLabel("ID do Aluno:"));
-        panel.add(alunoIdField);
-        panel.add(new JLabel("ID do Orientador:"));
-        panel.add(orientadorIdField);
-        panel.add(new JLabel("ID do Curso:"));
-        panel.add(cursoIdField);
+        panel.add(new JLabel("Aluno:"));
+        panel.add(alunoField);
+        panel.add(new JLabel("Orientador:"));
+        panel.add(orientadorField);
+        panel.add(new JLabel("Curso:"));
+        panel.add(cursoField);
+        panel.add(new JLabel("Local do Arquivo:"));
+        panel.add(localArquivoField);
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Depositar Trabalho", JOptionPane.OK_CANCEL_OPTION);
 
         if (result == JOptionPane.OK_OPTION) {
             try {
                 String titulo = tituloField.getText().trim();
-                int faculdadeId = Integer.parseInt(faculdadeIdField.getText().trim());
-                String dataConclusao = dataConclusaoField.getText().trim();
-                int alunoId = Integer.parseInt(alunoIdField.getText().trim());
-                int orientadorId = Integer.parseInt(orientadorIdField.getText().trim());
-                int cursoId = Integer.parseInt(cursoIdField.getText().trim());
+                String faculdade = faculdadeField.getText().trim();
+                LocalDate dataConclusao = LocalDate.parse(dataConclusaoField.getText().trim());
+                String aluno = alunoField.getText().trim();
+                String orientador = orientadorField.getText().trim();
+                String curso = cursoField.getText().trim();
+                String localArquivo = localArquivoField.getText().trim();
 
-                Faculdade faculdade = control.getFaculdadeById(faculdadeId);
-                Aluno aluno = (Aluno) control.getPessoaById(alunoId);
-                Orientador orientador = control.getOrientadorById(orientadorId);
-                Curso curso = control.getCursoById(cursoId);
+                // Criando o objeto Trabalho com os dados fornecidos
+                Trabalho trabalho = new Trabalho(titulo, faculdade, dataConclusao, aluno, orientador, curso, localArquivo, 0, 0);
 
-                Trabalho trabalho = new Trabalho(titulo, faculdade, dataConclusao, aluno, orientador, curso, 0, 0);
+                // Salvando o trabalho no banco de dados
                 control.addTrabalho(trabalho);
 
                 JOptionPane.showMessageDialog(null, "Trabalho depositado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Por favor, insira IDs válidos para Faculdade, Aluno, Orientador e Curso.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao depositar trabalho: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -147,7 +148,6 @@ public class TelaUsuario extends JFrame {
     
         JOptionPane.showMessageDialog(null, listaReservas.toString(), "Reservas", JOptionPane.INFORMATION_MESSAGE);
     }
-    
 
     private void detalhesObra() {
         JTextField tituloField = new JTextField(20);
@@ -247,5 +247,4 @@ public class TelaUsuario extends JFrame {
             }
         }
     }
-    
 }

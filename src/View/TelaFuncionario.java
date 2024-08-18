@@ -29,21 +29,18 @@ public class TelaFuncionario extends JFrame {
 
     public TelaFuncionario(Controller control) {
         this.control = control;
-        inicializarDados();  // Chame o método de inicialização aqui
+        inicializarDados();
         setTitle("Tela Funcionário");
-        setSize(800, 600); // Ajuste no tamanho para acomodar as abas
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Abas para diferentes funcionalidades
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Aba de Gerenciamento de Usuários e Livros
         JPanel mainPanel = new JPanel();
         placeComponents(mainPanel);
         tabbedPane.addTab("Gerenciar", mainPanel);
 
-        // Aba de Empréstimos
         JPanel emprestimoPanel = createEmprestimoPanel();
         tabbedPane.addTab("Realizar Empréstimo", emprestimoPanel);
 
@@ -51,7 +48,6 @@ public class TelaFuncionario extends JFrame {
     }
 
     private void inicializarDados() {
-        // Inicialize as listas com os dados do controlador ou como listas vazias
         livros = control.getAllLivros();
         if (livros == null) {
             livros = new ArrayList<>();
@@ -76,7 +72,6 @@ public class TelaFuncionario extends JFrame {
     private void placeComponents(JPanel panel) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Botões
         JPanel buttonPanel = new JPanel();
         JButton listarUsuariosButton = new JButton("Listar Usuários");
         JButton listarLivrosButton = new JButton("Listar Livros");
@@ -90,9 +85,8 @@ public class TelaFuncionario extends JFrame {
 
         panel.add(buttonPanel);
 
-        // Tabelas
         JPanel tablePanel = new JPanel();
-        tablePanel.setLayout(new GridLayout(2, 1)); // Usando GridLayout para alinhar as tabelas verticalmente
+        tablePanel.setLayout(new GridLayout(2, 1));
 
         livrosTable = new JTable();
         usuariosTable = new JTable();
@@ -101,36 +95,20 @@ public class TelaFuncionario extends JFrame {
         tablePanel.add(new JScrollPane(usuariosTable));
         panel.add(tablePanel);
 
-        listarUsuariosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateUsuariosTable();
-            }
+        listarUsuariosButton.addActionListener(e -> updateUsuariosTable());
+
+        listarLivrosButton.addActionListener(e -> updateLivrosTable());
+
+        gerenciarLivrosButton.addActionListener(e -> {
+            dispose();
+            GerenciadorLivro gerenciadorLivro = new GerenciadorLivro(control);
+            gerenciadorLivro.setVisible(true);
         });
 
-        listarLivrosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                updateLivrosTable();
-            }
-        });
-
-        gerenciarLivrosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                GerenciadorLivro gerenciadorLivro = new GerenciadorLivro(control);
-                gerenciadorLivro.setVisible(true);
-            }
-        });
-
-        gerenciarUsuariosButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                GerenciadorUsuario gerenciadorUsuario = new GerenciadorUsuario(control);
-                gerenciadorUsuario.setVisible(true);
-            }
+        gerenciarUsuariosButton.addActionListener(e -> {
+            dispose();
+            GerenciadorUsuario gerenciadorUsuario = new GerenciadorUsuario(control);
+            gerenciadorUsuario.setVisible(true);
         });
     }
 
@@ -138,7 +116,6 @@ public class TelaFuncionario extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        // Campos para seleção do Livro e Usuário
         JTextField livroTituloField = new JTextField(20);
         JTextField usuarioNomeField = new JTextField(20);
 
@@ -148,50 +125,44 @@ public class TelaFuncionario extends JFrame {
         panel.add(usuarioNomeField);
 
         JButton realizarEmprestimoButton = new JButton("Realizar Empréstimo");
-        realizarEmprestimoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String livroTitulo = livroTituloField.getText().trim();
-                String usuarioNome = usuarioNomeField.getText().trim();
+        realizarEmprestimoButton.addActionListener(e -> {
+            String livroTitulo = livroTituloField.getText().trim();
+            String usuarioNome = usuarioNomeField.getText().trim();
 
-                Livro livroSelecionado = livros.stream()
+            Livro livroSelecionado = livros.stream()
                     .filter(livro -> livro.getTitulo().equalsIgnoreCase(livroTitulo))
                     .findFirst().orElse(null);
 
-                Pessoa usuarioSelecionado = usuarios.stream()
+            Pessoa usuarioSelecionado = usuarios.stream()
                     .filter(usuario -> usuario.getNome().equalsIgnoreCase(usuarioNome))
                     .findFirst().orElse(null);
 
-                if (livroSelecionado == null) {
-                    JOptionPane.showMessageDialog(null, "Livro não encontrado.");
-                    return;
-                }
-
-                if (usuarioSelecionado == null) {
-                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-                    return;
-                }
-
-                if (!livroSelecionado.isDisponivel()) {
-                    JOptionPane.showMessageDialog(null, "O livro não está disponível para empréstimo.");
-                    return;
-                }
-
-                // Definir a data do empréstimo e a data de devolução
-                LocalDate dataEmprestimo = LocalDate.now();
-                LocalDate dataDevolucao = dataEmprestimo.plusDays(14); // Exemplo de prazo de 14 dias
-
-                // Realizar o empréstimo
-                Emprestimos novoEmprestimo = new Emprestimos(usuarioSelecionado, livroSelecionado, dataEmprestimo, dataDevolucao);
-                emprestimos.add(novoEmprestimo);
-                control.addEmprestimo(novoEmprestimo);
-
-                // Atualizar a disponibilidade do livro
-                livroSelecionado.setDisponivel(false);
-                control.updateLivro(livroSelecionado);
-
-                JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
+            if (livroSelecionado == null) {
+                JOptionPane.showMessageDialog(null, "Livro não encontrado.");
+                return;
             }
+
+            if (usuarioSelecionado == null) {
+                JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                return;
+            }
+
+            if (!livroSelecionado.isDisponivel()) {
+                JOptionPane.showMessageDialog(null, "O livro não está disponível para empréstimo.");
+                return;
+            }
+
+            LocalDate dataEmprestimo = LocalDate.now();
+            LocalDate dataDevolucao = dataEmprestimo.plusDays(14);
+
+            Emprestimos novoEmprestimo = new Emprestimos(usuarioSelecionado, livroSelecionado, dataEmprestimo, dataDevolucao);
+            emprestimos.add(novoEmprestimo);
+            control.addEmprestimo(novoEmprestimo);
+
+            livroSelecionado.setDisponivel(false);
+            control.updateLivro(livroSelecionado);
+
+            JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!");
         });
 
         panel.add(realizarEmprestimoButton);
@@ -213,7 +184,6 @@ public class TelaFuncionario extends JFrame {
     }
 
     private void updateUsuariosTable() {
-        // Certifique-se de que a lista de usuários esteja atualizada
         usuarios = control.getAllPessoas();
 
         DefaultTableModel model = new DefaultTableModel();
@@ -227,7 +197,6 @@ public class TelaFuncionario extends JFrame {
 
         usuariosTable.setModel(model);
 
-        // Revalide e repinte a tabela
         usuariosTable.revalidate();
         usuariosTable.repaint();
     }

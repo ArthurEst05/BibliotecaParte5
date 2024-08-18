@@ -1,8 +1,6 @@
 package Controller;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -58,14 +56,12 @@ public class Controller {
         this.pessoaDao = new PessoaDaoJDBC(conn);
     }
 
-    // Faculdades
     public void addFaculdade(Faculdade faculdade) { faculdadeDao.insert(faculdade); }
     public void updateFaculdade(Faculdade faculdade) { faculdadeDao.update(faculdade); }
     public void deleteFaculdade(int id) { faculdadeDao.deleteById(id); }
     public Faculdade getFaculdadeById(int id) { return faculdadeDao.findById(id); }
     public List<Faculdade> getAllFaculdades() { return faculdadeDao.findAll(); }
 
-    // Livros
     public void addLivro(Livro livro) { livroDao.insert(livro); }
     public void updateLivro(Livro livro) { livroDao.update(livro); }
     public void deleteLivro(int id) { livroDao.deleteById(id); }
@@ -80,49 +76,42 @@ public class Controller {
         }
     }
 
-    // Funcionários
     public void addFuncionario(Funcionario funcionario) { funcionarioDao.insert(funcionario); }
     public void updateFuncionario(Funcionario funcionario) { funcionarioDao.update(funcionario); }
     public void deleteFuncionario(int id) { funcionarioDao.deleteById(id); }
     public Funcionario getFuncionarioById(int id) { return funcionarioDao.findById(id); }
     public List<Funcionario> getAllFuncionarios() { return funcionarioDao.findAll(); }
 
-    // Orientadores
     public void addOrientador(Orientador orientador) { orientadorDao.insert(orientador); }
     public void updateOrientador(Orientador orientador) { orientadorDao.update(orientador); }
     public void deleteOrientador(int id) { orientadorDao.deleteById(id); }
     public Orientador getOrientadorById(int id) { return orientadorDao.findById(id); }
     public List<Orientador> getAllOrientadores() { return orientadorDao.findAll(); }
 
-    // Trabalhos
     public void addTrabalho(Trabalho trabalho) { trabalhoDao.insert(trabalho); }
     public void updateTrabalho(Trabalho trabalho) { trabalhoDao.update(trabalho); }
     public void deleteTrabalho(int id) { trabalhoDao.deleteById(id); }
     public Trabalho getTrabalhoById(int id) { return trabalhoDao.findById(id); }
     public List<Trabalho> getAllTrabalhos() { return trabalhoDao.findAll(); }
 
-    // Reservas
     public void addReserva(Reserva reserva) { reservaDao.insert(reserva); }
     public void updateReserva(Reserva reserva) { reservaDao.update(reserva); }
     public void deleteReserva(int id) { reservaDao.deleteById(id); }
     public Reserva getReservaById(int id) { return reservaDao.findById(id); }
     public List<Reserva> getAllReservas() { return reservaDao.findAll(); }
 
-    // Empréstimos
     public void addEmprestimo(Emprestimos emprestimo) { emprestimoDao.insert(emprestimo); }
     public void updateEmprestimo(Emprestimos emprestimo) { emprestimoDao.update(emprestimo); }
     public void deleteEmprestimo(int id) { emprestimoDao.deleteById(id); }
     public Emprestimos getEmprestimoById(int id) { return emprestimoDao.findById(id); }
     public List<Emprestimos> getAllEmprestimos() { return emprestimoDao.findAll(); }
 
-    // Cursos
     public void addCurso(Curso curso) { cursoDao.insert(curso); }
     public void updateCurso(Curso curso) { cursoDao.update(curso); }
     public void deleteCurso(int id) { cursoDao.deleteById(id); }
     public Curso getCursoById(int id) { return cursoDao.findById(id); }
     public List<Curso> getAllCursos() { return cursoDao.findAll(); }
 
-    // Pessoas
     public void addPessoa(Pessoa pessoa){ pessoaDao.insert(pessoa); }
     public void updatePessoa(Pessoa pessoa){ pessoaDao.update(pessoa); }
     public void deletePessoa(Integer id){ pessoaDao.deleteById(id); }
@@ -132,7 +121,7 @@ public class Controller {
         try {
             return ((PessoaDaoJDBC) pessoaDao).findByUsernameAndPassword(username, password);
         } catch (SQLException e) {
-            e.printStackTrace(); // Trate o erro adequadamente
+            e.printStackTrace();
             return null;
         }
     }

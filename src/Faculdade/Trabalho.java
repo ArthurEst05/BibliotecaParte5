@@ -1,51 +1,24 @@
 package Faculdade;
 
-import Usuarios.Aluno;
-import Usuarios.Orientador;
+import java.time.LocalDate;
 
 public class Trabalho {
     private long id;
     private String titTrabalho;
-    private Faculdade faculdade;
-    private String dataConclusão;
-    private Aluno aluno;
-    private Orientador orientador;
-    private Curso curso;
+    private String faculdade;
+    private LocalDate dataConclusao;
+    private String aluno;
+    private String orientador;
+    private String curso;
     private String localArquivo;
     private int score;
     private int quantidadedeVotos;
-
-    
-    public Trabalho(String titTrabalho, Faculdade faculdade, String dataConclusão, Aluno aluno,
-            Orientador orientador, Curso curso, int score, int quantidadedeVotos) {
+  
+    public Trabalho(String titTrabalho, String faculdade, LocalDate dataConclusao, String aluno, String orientador,
+            String curso, String localArquivo, int score, int quantidadedeVotos) {
         this.titTrabalho = titTrabalho;
         this.faculdade = faculdade;
-        this.dataConclusão = dataConclusão;
-        this.aluno = aluno;
-        this.orientador = orientador;
-        this.curso = curso;
-        this.score = score;
-        this.quantidadedeVotos = quantidadedeVotos;
-        }
-    
-    public Trabalho(long id, String titTrabalho, Faculdade faculdade, String dataConclusão, Aluno aluno,
-            Orientador orientador, Curso curso, int score, int quantidadedeVotos) {
-        this.id = id;
-        this.titTrabalho = titTrabalho;
-        this.faculdade = faculdade;
-        this.dataConclusão = dataConclusão;
-        this.aluno = aluno;
-        this.orientador = orientador;
-        this.curso = curso;
-        this.score = score;
-        this.quantidadedeVotos = quantidadedeVotos;
-    }
-    public Trabalho(long id, String titTrabalho, Faculdade faculdade, String dataConclusão, Aluno aluno,
-            Orientador orientador, Curso curso, String localArquivo, int score, int quantidadedeVotos) {
-        this.id = id;
-        this.titTrabalho = titTrabalho;
-        this.faculdade = faculdade;
-        this.dataConclusão = dataConclusão;
+        this.dataConclusao = dataConclusao;
         this.aluno = aluno;
         this.orientador = orientador;
         this.curso = curso;
@@ -53,6 +26,7 @@ public class Trabalho {
         this.score = score;
         this.quantidadedeVotos = quantidadedeVotos;
     }
+
     public long getId() {
         return id;
     }
@@ -65,34 +39,35 @@ public class Trabalho {
     public void setTitTrabalho(String titTrabalho) {
         this.titTrabalho = titTrabalho;
     }
-    public Faculdade getFaculdade() {
+    public String getFaculdade() {
         return faculdade;
     }
-    public void setFaculdade(Faculdade faculdade) {
+    public void setFaculdade(String faculdade) {
         this.faculdade = faculdade;
     }
-    public String getDataConclusão() {
-        return dataConclusão;
+    public LocalDate getDataConclusao() {
+        return dataConclusao;
     }
-    public void setDataConclusão(String dataConclusão) {
-        this.dataConclusão = dataConclusão;
+
+    public void setDataConclusao(LocalDate dataConclusao) {
+        this.dataConclusao = dataConclusao;
     }
-    public Aluno getAluno() {
+    public String getAluno() {
         return aluno;
     }
-    public void setAluno(Aluno aluno) {
+    public void setAluno(String aluno) {
         this.aluno = aluno;
     }
-    public Orientador getOrientador() {
+    public String getOrientador() {
         return orientador;
     }
-    public void setOrientador(Orientador orientador) {
+    public void setOrientador(String orientador) {
         this.orientador = orientador;
     }
-    public Curso getCurso() {
+    public String getCurso() {
         return curso;
     }
-    public void setCurso(Curso curso) {
+    public void setCurso(String curso) {
         this.curso = curso;
     }
     public String getLocalArquivo() {
